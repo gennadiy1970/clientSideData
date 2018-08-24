@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>client side data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54="
+        crossorigin="anonymous">
+    <style>
+        table td,
+        table th {
+            word-break: break-all;
+        }
+    </style>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+
+<body>
+    <div class="wrapper">
+        <section>
+            <h2>Сохранение данных на стороне клиента</h2>
+            <h4>API браузеров для хранения данных пользователя локально (на стороне клиента).</h4>
+        </section>
+        <section>
+            <p>Доступ к данным на стороне клиента  ограничен - данные предоставляются только для ресурсов с общего домена. Т.е. страницы
+                одного домена могут использовать данные хранилища, связанные с этим доменом. А страницам других доменов будет отказано в доступе.</p>
+            <p>API позволяют устанавливать сроки хранения данных и предоставляют разный максимальный размер памяти для хранения.</p>
+            <p>Два основных типа хранения данных: Web Storage (sessionStorage и localStorage ) и Cookies.</p>
+        </section>
+    </div>
+    <div class="wrapper">
+        <section>
+            <h3>Web Storage</h3>
+            <p>API Web Storage - это обычный конструктор объекта с названием <b>Storage</b>. 
+                Этот конструктор генерирует объект при создании страницы. Это всегда <i>новый объект</i>. И это новый объект для <i>каждой новой страницы</i>, даже если пытаться открыть одну и ту же ссылку.
+                Свойства и ключи <i>Storage</i> всегда являются
+                <b>string</b>. Разница между <i>localStorage</i> и <i>sessionStorage</i> заключается лишь в сроке хранения
+                и области видимости.</p>
+            <h4>Максимальный размер Web Storage</h4>
+            <p>Посмотреть <a href="http://dev-test.nemikor.com/web-storage/support-test/">максимальный размер Web Storage</a>
+                для версий старых браузеров  можно по ссылке. В общем случае можно рассчитывать  на 2Мб, а для современных браузеров
+                и на 10Мб.
+            </p>
+            <h4>Методы Web Storage</h4>
+            <ul>
+                <li><b>.setItem(key, value)</b> не возвращает значения</li>
+                <li><b>.getItem(key)</b> возвращает value</li>
+                <li><b>.length</b> возвращает количество ключей</li>
+                <li><b>.key(index)</b> возвращает key по индексу, начиная с 0 </li>
+                <li><b>.removeItem(key)</b> не возвращает значения.</li>
+                <li><b>.clear()</b> не возвращает значения</li>
+            </ul>
+            <h4>Пример использования</h4>
+            <details>
+                <pre><code>
+<span class="comment">Задать 
+    ключ и ­зна­че­ние:</span>                   
+localStorage.setItem(
+    'myKey', <span class="comment">ключ</span>
+    'myValue'<span class="comment">значение</span>
+);    
+<span class="comment">­По­лу­чить­ 
+    со­хра­нен­ное ­зна­че­ние:</span>                 
+const myString = localStorage
+    .getItem('myKey');
+ <span class="comment">'myValue'</span>
+<span class="comment">­По­лу­чить­ 
+        со­хра­нен­ный ключ:</span>                 
+const Key = localStorage
+    .key(0);
+<span class="comment">'myKey'</span>
+    
+                </code></pre>
+            </details>
+            <h4>Доступность данных</h4>
+            <p>Доступность данных определяется</p>
+            <ul>
+                <li>протоколом</li>
+                <li>именем хоста</li>
+                <li>номером порта</li>
+            </ul>
+            <p>Пример недоступности данных для сайта <b>https://goit.ua</b> (документы с разным происхождением)</p>
+            <details>
+                <pre> <code>
+http://goit.ua 
+<span class="comment">http <i>vs</i> https</span>
+
+http://fe.goit.ua 
+<span class="comment">fe.goit <i>vs</i> goit </span>
+
+http://goit.ua:8000 
+<span class="comment">8000 <i>vs</i> 8080</span>
+                </code></pre>
+            </details>
+            <p>Проверить Web Storage на <a href="./test.html">странице с общим происхождением</a></p>
+            <h4>Событие storage</h4>
+            <p>Если в одном из окон с общим происхождением произвести изменение Web Storage, то во всех окнах (кроме текущего)
+                будет сгенерировано событие <b>storage</b>. Это событие делает доступным изменения в <i>Web Storage</i> всем открытым
+                окнам с общим происхождением.</p>
+            <p>Список свойств события <b>storage</b></p>
+            <ul>
+                <li>key</li>
+                <li>oldValue</li>
+                <li>newValue</li>
+                <li>url</li>
+                <li>storageArea</li>
+            </ul>
+            <p>Для проверки события откройте в другой вкладке <a href="./test.html"> соседнее окно <i>test.html</i></a> 
+                и сгенерируйте событие в текущем окне. Ключи и значения этого события будут отображены на странице <i>test.html</i> </p>
+        </section>
+        <section>
+            <h4>sessionStorage</h4>
+            <p>Свойство sessionStorage хранит данные в течение сеанса (до закрытия браузера) - </p>
+            <ul>
+                <li>пока открыто окно (не iframe)</li>
+                <li>пока открыта вкладка браузера, сохранившая данные</li>
+            </ul>
+            <p>Если браузер восстановит закрытую вкладку, то восстановит и sessionStorage (не 100%)</p>
+            <p class="warning">В каждом окне браузера - свой sessionStorage, даже если это одна и та же страница!</p>
+            <h4>localStorage</h4>
+            <p>Свойство localStorage не имеет ограничений по времени хранения и может быть удалено только с помощью JavaScript</p>
+            <table>
+                <caption>
+                    <h4>Преобразования в строку. Преобразование из строки.</h4>
+                </caption>
+                <tr>
+                    <th>тип</th>
+                    <th>в строку</th>
+                    <th>из строки</th>
+                </tr>
+                <tr>
+                    <td>Date</td>
+                    <td>let str = (new Date()).toUTCString()</td>
+                    <td>let date = Date.parse(str)</td>
+                </tr>
+                <tr>
+                    <td>Object</td>
+                    <td>let str = JSON.stringify(obj)</td>
+                    <td>let oj = JSON.parse(str)</td>
+                </tr>
+            </table>
+        </section>
+    </div>
+    <div class="wrapper">
+        <section>
+            <h3>Cookie</h3>
+            <p>Cookie - это строки пар ключ-значения и их атрибуты, сохраняемых браузером. Размер одного Cookie не может
+                быть более 4Kb. 
+            </p>
+            <p><span class="comment">Важно учесть, что символ в JavaScript занимает 2 байта из-за UTF16, а в Cookie помещает 
+                    символа в 1 байт из-за UTF8. При этом кириллический символ отображается несколькими ASCII символами: "Ї" преобразуется в "%D0%87"</span></p>
+            <p>На низшем уровне реализованы как расширение протокола HTTP</p>
+            <p>Данные в cookies автоматически передаются между браузером и веб-сервером</p>
+            <p>Поддерживают политику доступности данных (общее происхождение)</p>
+            <h4>Разрешение на использование Cookie</h4>
+            <p>
+                <pre><code>
+navigator.cookieEnabled
+
+</code></pre>
+            </p>
+            <ul>
+                <li><b>true</b> - Cookie разрешены</li>
+                <li><b>false</b> - Cookie запрещены, кроме тех, которые имеют сессионный "срок годности"</li>
+            </ul>
+            <p>Т.к. способ не стандартизирован, то стоит подстраховаться:</p>
+            <p>
+                <pre><code>
+navigator.cookieEnabled 
+|| document.cookie.length &gt; 0
+
+</code></pre>
+            </p>
+            <h4><b>CRUD</b> для Cookie или encodeURIComponent и decodeURIComponent</h4>
+            <p><b>R</b> (read)</p>
+            <p>Чтение всех Cookie текущего документа: <b>document.cookie</b></p>
+            <p>Получим строку вида "key=value; key1=value1;"</p>
+            <p><b>Декодирование</b> Строка по протоколу HTTP должна быть в формате UTF8, а в JavaScript строка в формате UTF16.
+                Проблема заметна когда символы выходят за ASCII набор:</p>
+            <details>
+                <pre> <code>
+<span class="comment">исходная строка</span>                  
+let uri = "видео/video.flv"  
+
+<span class="comment">кодируем для web</span>                  
+let webUri = 
+  encodeURIComponent(uri);
+<span class="comment">%D0%B2%D0%B8%D0%B4%D0
+    %B5%D0%BE%2Fvideo.flv</span>       
+
+<span class="comment">декодируем для JS</span>                  
+let dec = 
+  decodeURIComponent(webUri);
+<span class="comment">видео/video.flv</span>   
+                </code></pre>
+            </details>
+            <p>Для работы с ключами и значениями придется использовать методы работы со строками, например <i>.split()</i></p>
+            <p><b>С</b> (create)</p>
+            <p>document.cookie = "newKey=newValue;" <span class="comment">можно запись только одну пару с атрибутами</span></p>
+            <p>Сложность в том, что надо перевести текст в формат UTF8 и исключить ряд символов запрещенных протоколом HTTP
+                <i>;, </i>: document.cookie = ­encodeURIComponent( "newKey=newValue;" )</p>
+            <p><b>U</b> (update) - требуются ­decodeURIComponent, ­encodeURIComponent и методы работы со строками, например
+                .replace(). Для замены потребуется указать ключ, новое значение и все объявленные для этой пары атрибуты.</p>
+            <p><b>D</b> (delete) - требуются ­­decodeURIComponent, encodeURIComponent и методы работы со строками
+                для замены атрибута <i>max-age</i> на  <b>"max-age:0"</b>. Для удаления потребуется указать ключ, новое значение и все объявленные для этой пары атрибуты.</p>
+            <p>Учитывая все эти сложности <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie/Simple_document.cookie_framework">
+                    реализован фреймворк для работы с Cookie</a> поддерживающий методы </p>
+            <ul>
+                <li>getItem(key)</li>
+                <li>setItem(key, value, optional)</li>
+                <li>removeItem(key, optional)</li>
+                <li>hasItem(key)</li>
+                <li>keys()</li>
+            </ul>
+        </section>
+        <section>
+            <h3>Атрибуты Cookie</h3>
+            <p>Атрибуты должны идти после пары key=value и разделяться точкой с запятой.</p>
+            <h4>Срок хранения</h4>
+            <p>Записанный Cookie в виде пары <b>ключ=значение</b> является сессионным, т.е. время жизни составит время до
+                закрытия окна браузера.</p>
+            <p><b>max-age</b> атрибут, добавленный после пары <i>ключ=значение</i> укажет срок хранения в секундах. Пример
+                записи:</p>
+            <details>
+                <pre> <code>
+let days =  
+    14*24*60*60 + ";";
+<span class="comment">14 дней в секундах</span>
+
+let pairs = 
+    ­encodeURIComponent(
+        "key:value;"
+    )
+
+­document.cookie ­=
+ pairs + "max-age=" + days;
+
+                </code></pre>
+            </details>
+            <h4>Область видимости</h4>
+            <p>Аналогично <i>max-age</i> можно дописать атрибуты, определяющие область видимости: <b>path</b>,
+                <b>domain</b> и <b>secure</b></p>
+            <p>Для изменения значения Cookie потребуется указать все атрибуты (option) и ключ.</p>
+            <p>Для удаления значения Cookie потребуется указать все атрибуты (option) и ключ. Но атрибуту
+                <i>max-age</i> следует присвоить значение 0.
+            </p>
+            <p><b>path</b> указывает путь к документу. Если <i>path</i> не указан, то это путь к текущему документу.</p>
+            <p>Путь должен быть абсолютным <span class="comment">/pages</span></p>
+            <p><b>domain</b> указывает имя хоста. Если <i>domain</i> не указан, то это имя текущего хоста без sub-domen.
+                Если домен указан, все sub-domen всегда включаются</p>
+            <p>Пример <span class="comment">goit.ua</span> или <span class="comment">fe.goit.ua</span></p>
+            <p><b>secure</b> Cookie могут передаваться только через безопасный протокол, такой как <i>https</i></p>
+            <h4>Безопасность использования Cookie</h4>
+            <p><a href="https://humanwhocodes.com/blog/2009/05/12/cookies-and-security/">Описание возможности атак на Cookie
+                    вашего сайта</a> содержит перечень основных атак. </p>
+        </section>
+    </div>
+</body>
+
+</html>
